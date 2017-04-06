@@ -1153,6 +1153,9 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 */
 	protected function addTranslatableFields(&$fields) {
 		// used in LeftAndMain->init() to set language state when reading/writing record
+        if(!$this->owner->ID) {
+            $this->owner->Locale = self::get_current_locale();
+        }
 		$fields->push(new HiddenField("Locale", "Locale", $this->owner->Locale));
 		
 		// Don't apply these modifications for normal DataObjects - they rely on CMSMain logic
