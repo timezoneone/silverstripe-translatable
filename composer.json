@@ -1,5 +1,5 @@
 {
-	"name": "silverstripe/translatable",
+	"name": "timezoneone/silverstripe-translatable",
 	"type": "silverstripe-module",
 	"description": "Allows translation of DataObject and SiteTree records into multiple languages ",
 	"keywords": [
@@ -10,7 +10,7 @@
 		"globalization"
 	],
 	"license": "BSD-3-Clause",
-	"homepage": "https://github.com/silverstripe/silverstripe-translatable/",
+	"homepage": "https://github.com/timezoneone/silverstripe-translatable/",
 	"authors": [
 		{
 			"name": "Ingo Schommer",
@@ -38,7 +38,7 @@
 		}
 	},
 	"support": {
-		"issues": "https://github.com/silverstripe/silverstripe-translatable/issues?state=open"
+		"issues": "https://github.com/timezoneone/silverstripe-translatable/issues?state=open"
 	},
 	"minimum-stability": "dev"
 }
