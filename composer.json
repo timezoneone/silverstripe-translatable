@@ -1,5 +1,5 @@
 {
-	"name": "timezoneone/silverstripe-translatable",
+	"name": "timezoneone/translatable",
 	"type": "silverstripe-module",
 	"description": "Allows translation of DataObject and SiteTree records into multiple languages ",
 	"keywords": [
