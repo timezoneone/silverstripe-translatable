@@ -1580,16 +1580,27 @@ class Translatable extends DataExtension implements PermissionProvider {
 		if($translations->count()) {
 			$translations = $translations->toArray();
 			$translations[] = $this->owner;
+            $homePage = SiteTree::get_by_link(Config::inst()->get('RootURLController', 'default_homepage_link'));
 
 			foreach($translations as $translation) {
 				$tags .= sprintf($template,
 					Convert::raw2xml($translation->Title),
 					i18n::convert_rfc1766($translation->Locale),
-					$translation->AbsoluteLink()
-				);
+                    $translation->ID === $homePage->ID ? Director::absoluteURL('/') : $translation->AbsoluteLink()
+                );
 			}
 		}
-	}
+
+        $defaultTranslation = $this->getTranslation(self::default_locale());
+        if($defaultTranslation && $defaultTranslation->exists()) {
+            $tags .= sprintf($template,
+                Convert::raw2xml($defaultTranslation->Title),
+                'x-default',
+                $defaultTranslation->ID === $homePage->ID ? Director::absoluteURL('/') : $defaultTranslation->AbsoluteLink()
+            );
+        }
+
+    }
 	
 	function providePermissions() {
 		if(!SiteTree::has_extension('Translatable') || !class_exists('SiteTree')) return false;
