@@ -1573,17 +1573,18 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 */
 	function MetaTags(&$tags) {
 		$template = '<link rel="alternate" type="text/html" title="%s" hreflang="%s" href="%s" />' . "\n";
-		$translations = $this->owner->getTranslations();
-		if($translations->count()) {
+        $homePage = SiteTree::get_by_link(Config::inst()->get('RootURLController', 'default_homepage_link'));
+        $translations = $this->owner->getTranslations();
+
+        if($translations->count()) {
 			$translations = $translations->toArray();
 			$translations[] = $this->owner;
-            $homePage = SiteTree::get_by_link(Config::inst()->get('RootURLController', 'default_homepage_link'));
 
 			foreach($translations as $translation) {
 				$tags .= sprintf($template,
 					Convert::raw2xml($translation->Title),
 					i18n::convert_rfc1766($translation->Locale),
-                    $translation->ID === $homePage->ID ? Director::absoluteURL('/') : $translation->AbsoluteLink()
+                    ($translation->ID === $homePage->ID) ? Director::absoluteURL('/') : $translation->AbsoluteLink()
                 );
 			}
 		}
@@ -1593,7 +1594,7 @@ class Translatable extends DataExtension implements PermissionProvider {
             $tags .= sprintf($template,
                 Convert::raw2xml($defaultTranslation->Title),
                 'x-default',
-                $defaultTranslation->ID === $homePage->ID ? Director::absoluteURL('/') : $defaultTranslation->AbsoluteLink()
+                ($defaultTranslation->ID === $homePage->ID) ? Director::absoluteURL('/') : $defaultTranslation->AbsoluteLink()
             );
         }
 
