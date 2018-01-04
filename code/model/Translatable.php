@@ -1576,8 +1576,10 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 */
 	function MetaTags(&$tags) {
 		$template = '<link rel="alternate" type="text/html" title="%s" hreflang="%s" href="%s" />' . "\n";
-		$translations = $this->owner->getTranslations();
-		if($translations->count()) {
+        $homePage = SiteTree::get_by_link(Config::inst()->get('RootURLController', 'default_homepage_link'));
+        $translations = $this->owner->getTranslations();
+
+        if($translations->count()) {
 			$translations = $translations->toArray();
 			$translations[] = $this->owner;
 
@@ -1585,11 +1587,21 @@ class Translatable extends DataExtension implements PermissionProvider {
 				$tags .= sprintf($template,
 					Convert::raw2xml($translation->Title),
 					i18n::convert_rfc1766($translation->Locale),
-					$translation->AbsoluteLink()
-				);
+                    ($translation->ID === $homePage->ID) ? Director::absoluteURL('/') : $translation->AbsoluteLink()
+                );
 			}
 		}
-	}
+
+        $defaultTranslation = $this->getTranslation(self::default_locale());
+        if($defaultTranslation && $defaultTranslation->exists()) {
+            $tags .= sprintf($template,
+                Convert::raw2xml($defaultTranslation->Title),
+                'x-default',
+                ($defaultTranslation->ID === $homePage->ID) ? Director::absoluteURL('/') : $defaultTranslation->AbsoluteLink()
+            );
+        }
+
+    }
 	
 	function providePermissions() {
 		if(!SiteTree::has_extension('Translatable') || !class_exists('SiteTree')) return false;
